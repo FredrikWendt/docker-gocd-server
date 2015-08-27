@@ -1,6 +1,6 @@
 # Usage
 
-To build this docker containers use the following command
+To build this docker container use the following command
 
 ```
 docker build -t gocd-server:15.2.0 .

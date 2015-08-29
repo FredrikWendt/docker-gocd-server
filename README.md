@@ -1,12 +1,6 @@
 # Usage
 
-To build this docker container use the following command
-
-```
-docker build -t gocd-server:latest .
-```
-
-And to run this docker container
+To run this docker container use the following command
 
 ```
 docker run -d -p 8153:8153 -p 8154:8154 jsalverda/gocd-server:latest

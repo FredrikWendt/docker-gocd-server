@@ -2,9 +2,8 @@ FROM debian:jessie
 
 MAINTAINER Jorrit Salverda <jorrit.salverda@gmail.com>
 
+# build time environment variables
 ENV GO_VERSION 15.2.0-2248
-ENV GO_SERVER_PORT 8153
-ENV GO_SERVER_SSL_PORT 8154
 
 # install dependencies
 RUN apt-get update \
@@ -24,8 +23,15 @@ RUN curl -fSL "http://download.go.cd/gocd-deb/go-server-$GO_VERSION.deb" -o go-s
 # define mountable directories
 VOLUME ["/var/lib/go-server/artifacts", "/var/lib/go-server/db/h2db", "/var/lib/go-server/plugins/external", "/var/lib/go-server/pipelines/flyweight", "/var/log/go-server", "/etc/go", "/var/go/.ssh"]
 
+# runtime environment variables
+ENV SERVER_MEM 512m
+ENV SERVER_MAX_MEM 1024m
+ENV SERVER_MIN_PERM_GEN 128m
+ENV SERVER_MAX_PERM_GEN 256m
+ENV AGENT_KEY ""
+
 # expose ports
-EXPOSE $GO_SERVER_PORT $GO_SERVER_SSL_PORT
+EXPOSE 8153 8154
 
 # define default command
-CMD chown -R go:go /var/lib/go-server; sed -i -e "s/GO_SERVER_PORT=8153/GO_SERVER=${GO_SERVER_PORT}/" /etc/default/go-server; sed -i -e "s/GO_SERVER_SSL_PORT=8154/GO_SERVER_SSL_PORT=${GO_SERVER_SSL_PORT}/" /etc/default/go-server; /usr/share/go-server/server.sh; exec tail -F /var/log/go-server/*
+CMD chown -R go:go /var/lib/go-server; (/usr/share/go-server/server.sh &); until curl -s -o /dev/null 'http://localhost:8153'; do sleep 1; done; if [ -n "$AGENT_KEY" ]]; then sed -i -e 's/agentAutoRegisterKey="[^"]*" *//' -e 's#\(<server\)\(.*artifactsdir.*\)#\1 agentAutoRegisterKey="'$AGENT_KEY'"\2#' /etc/go/cruise-config.xml; fi; exec tail -F /var/log/go-server/*

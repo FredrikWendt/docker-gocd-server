@@ -3,19 +3,19 @@
 To build this docker container use the following command
 
 ```
-docker build -t gocd-server:15.2.0 .
+docker build -t gocd-server:latest .
 ```
 
 And to run this docker container
 
 ```
-docker run -d -p 8153:8153 -p 8154:8154 jsalverda/gocd-server:15.2.0
+docker run -d -p 8153:8153 -p 8154:8154 jsalverda/gocd-server:latest
 ```
 
 For setting up autoregistration for agents pass in the AGENT_KEY environment variable with a secret value
 
 ```
-docker run -d -p 8153:8153 -p 8154:8154 -e "AGENT_KEY=388b633a88de126531afa41eff9aa69e" jsalverda/gocd-server:15.2.0
+docker run -d -p 8153:8153 -p 8154:8154 -e "AGENT_KEY=388b633a88de126531afa41eff9aa69e" jsalverda/gocd-server:latest
 ```
 
 # Port offloading

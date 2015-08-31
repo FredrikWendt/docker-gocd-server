@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-MAINTAINER Jorrit Salverda <jorrit.salverda@gmail.com>
+MAINTAINER Jorrit Salverda <jsalverda@travix.com>
 
 # build time environment variables
 ENV GO_VERSION 15.2.0-2248
@@ -15,7 +15,9 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN curl -fSL "http://download.go.cd/gocd-deb/go-server-$GO_VERSION.deb" -o go-server.deb \
+RUN groupadd -r -g 999 go \
+    && useradd -r -d /var/go -g go -u 999 go \
+    && curl -fSL "http://download.go.cd/gocd-deb/go-server-$GO_VERSION.deb" -o go-server.deb \
     && dpkg -i go-server.deb \
     && rm -rf go-server.db \
     && sed -i -e "s/DAEMON=Y/DAEMON=N/" /etc/default/go-server
@@ -34,4 +36,4 @@ ENV AGENT_KEY ""
 EXPOSE 8153 8154
 
 # define default command
-CMD chown -R go:go /var/lib/go-server; (/usr/share/go-server/server.sh &); until curl -s -o /dev/null 'http://localhost:8153'; do sleep 1; done; if [ -n "$AGENT_KEY" ]]; then sed -i -e 's/agentAutoRegisterKey="[^"]*" *//' -e 's#\(<server\)\(.*artifactsdir.*\)#\1 agentAutoRegisterKey="'$AGENT_KEY'"\2#' /etc/go/cruise-config.xml; fi; exec tail -F /var/log/go-server/*
+CMD chown -R go:go /var/lib/go-server; chown -R go:go /var/log/go-server; chown -R go:go /etc/go; (/bin/su - go -c "/usr/share/go-server/server.sh &"); until curl -s -o /dev/null 'http://localhost:8153'; do sleep 1; done; if [ -n "$AGENT_KEY" ]]; then sed -i -e 's/agentAutoRegisterKey="[^"]*" *//' -e 's#\(<server\)\(.*artifactsdir.*\)#\1 agentAutoRegisterKey="'$AGENT_KEY'"\2#' /etc/go/cruise-config.xml; fi; exec tail -F /var/log/go-server/*

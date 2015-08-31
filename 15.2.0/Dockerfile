@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-MAINTAINER Jorrit Salverda <jsalverda@travix.com>
+MAINTAINER Jorrit Salverda <jorrit.salverda@gmail.com>
 
 # build time environment variables
 ENV GO_VERSION 15.2.0-2248

@@ -1,3 +1,10 @@
+# jsalverda/gocd-server
+
+A gocd-server container that can be controlled very well by its environment variables
+
+[![Docker starts](https://img.shields.io/docker/stars/jsalverda/gocd-server.svg)](https://hub.docker.com/r/jsalverda/gocd-server/)
+[![Docker pulls](https://img.shields.io/docker/pulls/jsalverda/gocd-server.svg)](https://hub.docker.com/r/jsalverda/gocd-server/)
+
 # Usage
 
 To run this docker container use the following command

@@ -1,6 +1,6 @@
 FROM jsalverda/base:jessie-git-jre-7
 
-MAINTAINER Jorrit Salverda <jorrit.salverda@gmail.com>
+MAINTAINER Jorrit Salverda
 
 # build time environment variables
 ENV GO_VERSION 15.2.0-2248

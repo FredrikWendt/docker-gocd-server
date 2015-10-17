@@ -66,7 +66,7 @@ docker run -d \
     -v /mnt/persistent-disk/gocd-server/config:/etc/go \
     -v /mnt/persistent-disk/gocd-server/logs:/var/log/go-server \
     -v /mnt/persistent-disk/gocd-server/ssh:/var/go/.ssh \
-    jsalverda/gocd-agent:latest
+    jsalverda/gocd-server:latest
 ```
 
 To make sure the process in the container can read and write to those directories create a user and group with same gid and uid on the host machine
